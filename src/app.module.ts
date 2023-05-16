@@ -1,12 +1,24 @@
 import { Module } from '@nestjs/common';
-import { BikesModule } from './bikes/bikes.module';
-import { RollersModule } from './rollers/rollers.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomersModule } from './customers/customers.module';
-import { DatasourceModule } from './datasource/datasource.module';
+import { OrdersModule } from './orders/orders.module';
+import { ItemsModule } from './items/items.module';
 
 @Module({
-  imports: [BikesModule, RollersModule, CustomersModule, DatasourceModule],
-  controllers: [],
-  providers: [],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'your_username',
+      password: 'your_password',
+      database: 'your_database',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
+    }),
+    CustomersModule,
+    OrdersModule,
+    ItemsModule,
+  ],
 })
 export class AppModule {}

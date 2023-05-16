@@ -1,44 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { DatasourceService } from '../datasource/datasource.service';
-import { Customer } from './customer.entity';
-import { HttpStatus } from '@nestjs/common';
-
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Customer } from './customers.entity';
+import { CreateCustomerDto } from './customers.dto';
 
 @Injectable()
-export class CustomersService 
-{
-    constructor(private readonly datasourceService: DatasourceService) {}
-    
-    create(customer: Customer) {
-        this.datasourceService.getCustomers().push(customer);
-        return customer;
-    }
+export class CustomersService {
+  constructor(
+    @InjectRepository(Customer)
+    private customersRepository: Repository<Customer>,
+  ) {}
 
-    findOne(id: number) {
-        return this.datasourceService
-          .getCustomers()
-          .find((customer) => customer.id === id);
-    }
-    
-    findAll(): Customer[] {
-        return this.datasourceService.getCustomers();
-    }
+  async createCustomer(createCustomerDto: CreateCustomerDto): Promise<Customer> {
+    const customer = this.customersRepository.create(createCustomerDto);
+    return this.customersRepository.save(customer);
+  }
 
-    update(id: number, updatedCustomer: Customer) {
-        const index = this.datasourceService
-          .getCustomers()
-          .findIndex((customer) => customer.id === id);
-        this.datasourceService.getCustomers()[index] = updatedCustomer;
-        return this.datasourceService.getCustomers()[index];
-      }
-    
-    remove(id: number) {
-    const index = this.datasourceService
-      .getCustomers()
-      .findIndex((customer) => customer.id === id);
-    this.datasourceService.getCustomers().splice(index, 1);
-    return HttpStatus.OK;
-    }
-
-
+  async getCustomerById(customerId: number): Promise<Customer> {
+    return this.customersRepository.findOne({ where: { customer_id: customerId } });
+  }
 }
+
