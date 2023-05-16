@@ -1,10 +1,55 @@
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+
 export class CreateItemDto {
-    readonly item_name: string;
-    readonly item_price: number;
-    readonly color: string;
-    readonly type: string;
-    readonly model: string;
-    readonly size: string;
-    readonly orderId: number;
-  }
-  
+  @IsNotEmpty()
+  @IsString()
+  item_name: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  item_price: number;
+
+  @IsNotEmpty()
+  @IsString()
+  color: string;
+
+  @IsNotEmpty()
+  @IsString()
+  type: string;
+
+  @IsNotEmpty()
+  @IsString()
+  model: string;
+
+  @IsNotEmpty()
+  @IsString()
+  size: string;
+}
+
+export class UpdateItemDto {
+  @IsString()
+  item_name?: string;
+
+  @IsNumber()
+  item_price?: number;
+
+  @IsString()
+  color?: string;
+
+  @IsString()
+  type?: string;
+
+  @IsString()
+  model?: string;
+
+  @IsString()
+  size?: string;
+}
+
+export class PartialItemDto {
+  @IsNumber()
+  item_id: number;
+
+  @IsString()
+  item_name: string;
+}

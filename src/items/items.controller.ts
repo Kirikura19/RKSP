@@ -1,6 +1,7 @@
-import { Controller, Post, Body, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body, Param, Get, Put, Delete } from '@nestjs/common';
 import { ItemsService } from './items.service';
-import { CreateItemDto } from './items.dto';
+import { CreateItemDto, UpdateItemDto, PartialItemDto } from './items.dto';
+import { Item } from './items.entity';
 
 @Controller('items')
 export class ItemsController {
@@ -11,8 +12,28 @@ export class ItemsController {
     return this.itemsService.createItem(createItemDto);
   }
 
+  @Get()
+  getAllItems() {
+    return this.itemsService.getAllItems();
+  }
+
   @Get(':id')
   getItemById(@Param('id') id: string) {
     return this.itemsService.getItemById(Number(id));
+  }
+
+  @Put(':id')
+  updateItem(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
+    return this.itemsService.updateItem(Number(id), updateItemDto);
+  }
+
+  @Delete(':id')
+  deleteItem(@Param('id') id: string) {
+    return this.itemsService.deleteItem(Number(id));
+  }
+
+  @Get(':id/partial')
+  getItemPartialInfo(@Param('id') id: string) {
+    return this.itemsService.getItemPartialInfo(Number(id));
   }
 }
